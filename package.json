@@ -1,0 +1,48 @@
+{
+  "name": "agent-memory-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for agent memory with provenance tracking, decay-weighted recall, and feedback loops",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "agent-memory-mcp": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "agent",
+    "memory",
+    "provenance",
+    "sqlite",
+    "ai",
+    "llm"
+  ],
+  "author": "kira-autonoma",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kira-autonoma/agent-memory-mcp.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^12.8.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
+}

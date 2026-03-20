@@ -11,7 +11,6 @@
 import Database from "better-sqlite3";
 import * as path from "path";
 import * as fs from "fs";
-
 const logger = {
   info: (msg: string) => process.env.MEMORY_DEBUG && console.error(`[memory] ${msg}`),
   debug: (msg: string) => process.env.MEMORY_DEBUG === "verbose" && console.error(`[memory:debug] ${msg}`),
@@ -46,6 +45,7 @@ export interface Memory {
   content: string;
   category: string; // e.g. "identity", "preference", "fact", "strategy", "lesson"
   tags: string[];
+  intent?: string; // WHY this was stored — the question it answers or the context that made it matter
   provenance: Provenance;
   created_at: string;
   updated_at: string;
@@ -61,6 +61,7 @@ export interface StoreInput {
   content: string;
   category: string;
   tags?: string[];
+  intent?: string; // WHY this matters — survives restarts unlike implicit context
   provenance: Provenance;
 }
 
@@ -138,6 +139,7 @@ function getDb(): Database.Database {
     CREATE INDEX IF NOT EXISTS idx_memories_active ON memories(active);
     CREATE INDEX IF NOT EXISTS idx_memories_created ON memories(created_at);
 
+
     -- Feedback log (for the flywheel)
     CREATE TABLE IF NOT EXISTS feedback_log (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -148,6 +150,14 @@ function getDb(): Database.Database {
       FOREIGN KEY (memory_id) REFERENCES memories(id)
     );
   `);
+
+  // Safe migration: add intent column if missing (SQLite ALTER TABLE is idempotent-safe via try/catch)
+  try {
+    db.exec(`ALTER TABLE memories ADD COLUMN intent TEXT`);
+    logger.info("Memory store migrated: added intent column");
+  } catch {
+    // Column already exists — normal case after first migration
+  }
 
   logger.info(`Memory store initialized at ${DB_PATH}`);
   return db;
@@ -170,14 +180,15 @@ export function store(input: StoreInput): Memory {
 
   db.prepare(
     `
-    INSERT INTO memories (id, content, category, tags, source_type, source_id, extraction_method, confidence, source_trust, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO memories (id, content, category, tags, intent, source_type, source_id, extraction_method, confidence, source_trust, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `,
   ).run(
     id,
     input.content,
     input.category,
     tags,
+    input.intent || null,
     input.provenance.source_type,
     input.provenance.source_id || null,
     input.provenance.extraction_method,
@@ -194,6 +205,7 @@ export function store(input: StoreInput): Memory {
     content: input.content,
     category: input.category,
     tags: input.tags || [],
+    intent: input.intent,
     provenance: input.provenance,
     created_at: now,
     updated_at: now,
@@ -295,6 +307,7 @@ export function recall(
       content: row.content,
       category: row.category,
       tags: JSON.parse(row.tags || "[]"),
+      intent: row.intent || undefined,
       provenance: {
         source_type: row.source_type as SourceType,
         source_id: row.source_id,

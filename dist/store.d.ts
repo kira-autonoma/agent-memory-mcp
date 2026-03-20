@@ -21,6 +21,7 @@ export interface Memory {
     content: string;
     category: string;
     tags: string[];
+    intent?: string;
     provenance: Provenance;
     created_at: string;
     updated_at: string;
@@ -35,6 +36,7 @@ export interface StoreInput {
     content: string;
     category: string;
     tags?: string[];
+    intent?: string;
     provenance: Provenance;
 }
 export interface RecallOptions {

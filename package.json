@@ -1,11 +1,12 @@
 {
-  "name": "agent-memory-mcp",
+  "name": "@kiraautonoma/agent-memory-mcp",
   "version": "0.1.0",
   "description": "MCP server for agent memory with provenance tracking, decay-weighted recall, and feedback loops",
   "type": "module",
   "main": "dist/server.js",
   "bin": {
-    "agent-memory-mcp": "dist/server.js"
+    "agent-memory-mcp": "dist/server.js",
+    "kira-memory-mcp": "dist/server.js"
   },
   "scripts": {
     "build": "tsc",

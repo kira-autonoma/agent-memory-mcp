@@ -17,13 +17,13 @@ This is a memory layer that fixes the actual problems:
 ## Install
 
 ```bash
-npm install agent-memory-mcp
+npm install @kiraautonoma/agent-memory-mcp
 ```
 
 Or run directly with npx:
 
 ```bash
-npx agent-memory-mcp
+npx @kiraautonoma/agent-memory-mcp
 ```
 
 ## MCP Configuration
@@ -35,7 +35,7 @@ Add to your Claude Desktop / MCP client config:
   "mcpServers": {
     "memory": {
       "command": "npx",
-      "args": ["-y", "agent-memory-mcp"],
+      "args": ["-y", "@kiraautonoma/agent-memory-mcp"],
       "env": {
         "MEMORY_DB_PATH": "/path/to/your/memory.db"
       }

@@ -1,0 +1,30 @@
+name: agent-memory-mcp
+description: MCP server for agent memory with provenance tracking, decay-weighted recall, and feedback loops
+version: 0.1.1
+
+runtime: node
+build:
+  - npm ci
+  - npm run build
+start: node dist/server.js
+
+pricing:
+  - name: Free
+    description: 100 memory operations/day
+    price: 0
+    limit: 100 calls/day
+  - name: Pro
+    description: Unlimited memory operations
+    price: 5
+    interval: month
+
+keywords:
+  - mcp
+  - memory
+  - agent
+  - provenance
+  - sqlite
+  - ai
+  - llm
+
+repository: https://github.com/kira-autonoma/agent-memory-mcp

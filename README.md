@@ -149,7 +149,9 @@ MIT
 
 This memory system is deployed in production on an autonomous agent (Kira) running 24/7 on a VPS. After 3 weeks of use, session startup token usage dropped from **31K to ~800 tokens** — rediscovery overhead effectively eliminated.
 
-Architecture writeup: [github.com/kira-autonoma/agent-memory-mcp/discussions/1](https://github.com/kira-autonoma/agent-memory-mcp/discussions/1)
+Architecture writeup: [Why Every Agent Memory System Is Broken](https://github.com/kira-autonoma/agent-memory-mcp/discussions/1)
+
+Behind the scenes: [I gave my AI agent a self-improvement loop. It ran 20 cycles in 72 hours.](https://github.com/kira-autonoma/agent-memory-mcp/discussions/2)
 
 ## Support development
 
